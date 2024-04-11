@@ -1,3 +1,5 @@
+using System.Diagnostics.Eventing.Reader;
+
 namespace InventoryMaintenance
 {
     public partial class frmInventoryMaint : Form
@@ -31,9 +33,32 @@ namespace InventoryMaintenance
             IEnumerable<InventoryItem> filteredItems = null!;
 
             // add items to the filteredItems collection based on FilterBy value
+            if (filter == "All") {
+                filteredItems =
+                    from item in items
+                    select item;
+            } else if (filter == "Under $10")
+            {
+                filteredItems =
+                    from item in items
+                    where item.Price < 10
+                    select item;
+            } else if (filter == "$10 to $50")
+            {
+                filteredItems =
+                    from item in items
+                    where item.Price >= 10 && item.Price <= 50
+                    select item;
+            } else if (filter == "Over $50")
+            {
+                filteredItems =
+                    from item in items
+                    where item.Price > 50
+                    select item;
+            }
 
             // change code to loop the filteredItems collection
-            foreach (InventoryItem item in items)
+            foreach (InventoryItem item in filteredItems)
             {
                 lstItems.Items.Add(item.GetDisplayText());
             }
